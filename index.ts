@@ -8,9 +8,6 @@ const rl = readline.createInterface({
 function ask() {
   rl.question("zappy> ", (word: string) => {
     word = word.trim().toLowerCase();
-    console.log("get Started with Zappy!");
-    console.log("You can say hi, what, or bye.");
-    console.log("You can also say help to Know more");
     if (word === "hi") {
       console.log("hello");
     } else if (word === "what") {
@@ -18,11 +15,19 @@ function ask() {
     } else if (word === "bye") {
       console.log("See ya!");
       rl.close(); 
-    } else if (word === "") {
+    } else if (word === "")
+    {
+      console.log("Please enter a command.");
+    }
+    else if (word == "exit") {
+      console.log("See ya!");
+      rl.close();
+    } else if (word === "help") {
     } else {
       console.log("Sorry, try hi, what, or bye.");
     }
-    if (word !== "bye") {
+
+    if (word !== "bye" && word !== "exit") {
       ask();
     }
   });
