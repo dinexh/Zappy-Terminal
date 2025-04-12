@@ -1,13 +1,60 @@
 import * as readline from "readline";
 import * as fs from "fs/promises";
+import * as fsSync from "fs";
 import * as path from "path";
+import { exec } from "child_process";
+
+let currentDir = process.cwd();
+const homeDir = process.env.HOME || process.env.USERPROFILE;
+
+function formatDir(dir: string) {
+  return dir.startsWith(homeDir!) ? dir.replace(homeDir!, "~") : dir;
+}
+
+function getGitBranch(): string | null {
+  const gitHeadPath = path.join(currentDir, ".git", "HEAD");
+  try {
+    const content = fsSync.readFileSync(gitHeadPath, "utf-8").trim();
+    const match = content.match(/ref: refs\/heads\/(.+)/);
+    return match ? match[1] : null;
+  } catch {
+    return null;
+  }
+}
+
+function tabCompleter(line: string) {
+  const allCommands = [
+    "hi", "what", "help", "bye", "exit", "mkdir", "touch",
+    "rm", "rmdir", "mv", "ls", "cd", "pwd", "cat", "clear", "git"
+  ];
+
+  const words = line.trim().split(" ");
+  const [cmd, ...rest] = words;
+
+  if (words.length === 1) {
+    const hits = allCommands.filter(c => c.startsWith(cmd));
+    return [hits.length ? hits : allCommands, cmd];
+  }
+
+  if (["cd", "touch", "rm", "rmdir", "mv", "cat"].includes(cmd)) {
+    const input = rest[rest.length - 1] || "";
+    try {
+      const files = fsSync.readdirSync(currentDir);
+      const suggestions = files.filter(f => f.startsWith(input));
+      return [suggestions.length ? suggestions : files, input];
+    } catch {
+      return [[], input];
+    }
+  }
+
+  return [[], line];
+}
 
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
+  completer: tabCompleter
 });
-
-let currentDir = process.cwd();
 
 async function runCommand(input: string) {
   const args = input.trim().split(" ");
@@ -25,35 +72,38 @@ async function runCommand(input: string) {
 
     case "help":
       console.log(`
-          Available Commands:
-            hi             → Say hello
-            what           → What can I do?
-            help           → List all commands
-            bye / exit     → Exit the terminal
-            mkdir <dir>    → Create a directory
-            touch <file>   → Create an empty file
-            rm <file>      → Delete a file
-            rm -rf <dir>   → Delete a directory recursively
-            rmdir <dir>    → Delete an empty directory
-            mv <src> <dst> → Rename or move file/folder
-            ls             → List files in current directory
-            cd <dir>       → Change directory
-            pwd            → Show full path of current directory
+Available Commands:
+  hi             → Say hello
+  what           → What can I do?
+  help           → List all commands
+  bye / exit     → Exit the terminal
+  mkdir <dir>    → Create a directory
+  touch <file>   → Create an empty file
+  rm <file>      → Delete a file
+  rm -rf <dir>   → Delete a directory recursively
+  rmdir <dir>    → Delete an empty directory
+  mv <src> <dst> → Rename or move file/folder
+  ls             → List files in current directory
+  cd <dir>       → Change directory
+  pwd            → Show full path of current directory
+  cat <file>     → View file content
+  clear          → Clear the screen
+  git <command>  → Run git commands
       `);
       break;
 
     case "mkdir":
       if (!target) return console.log("Usage: mkdir <dir-name>");
-      await fs.mkdir(path.join(currentDir, target)).then(() => {
-        console.log(`Created directory: ${target}`);
-      }).catch((err) => console.log("Error:", err.message));
+      await fs.mkdir(path.join(currentDir, target))
+        .then(() => console.log(`Created directory: ${target}`))
+        .catch((err) => console.log("Error:", err.message));
       break;
 
     case "touch":
       if (!target) return console.log("Usage: touch <file-name>");
-      await fs.writeFile(path.join(currentDir, target), "").then(() => {
-        console.log(`Created file: ${target}`);
-      }).catch((err) => console.log("Error:", err.message));
+      await fs.writeFile(path.join(currentDir, target), "")
+        .then(() => console.log(`Created file: ${target}`))
+        .catch((err) => console.log("Error:", err.message));
       break;
 
     case "rm":
@@ -91,11 +141,8 @@ async function runCommand(input: string) {
       try {
         const items = await fs.readdir(currentDir, { withFileTypes: true });
         for (const item of items) {
-          if (item.isDirectory()) {
-            console.log(`[DIR]  ${item.name}`);
-          } else {
-            console.log(`       ${item.name}`);
-          }
+          const isDir = item.isDirectory();
+          console.log(isDir ? `\x1b[34m[DIR]\x1b[0m  ${item.name}` : `       ${item.name}`);
         }
       } catch (err: any) {
         console.log("Error reading directory:", err.message);
@@ -121,6 +168,31 @@ async function runCommand(input: string) {
       console.log(currentDir);
       break;
 
+    case "cat":
+      if (!target) return console.log("Usage: cat <file>");
+      try {
+        const data = await fs.readFile(path.join(currentDir, target), "utf8");
+        console.log(data);
+      } catch (err: any) {
+        console.log("Error reading file:", err.message);
+      }
+      break;
+
+    case "clear":
+      console.clear();
+      break;
+
+    case "git":
+      const gitArgs = args.slice(1).join(" ");
+      exec(`git ${gitArgs}`, { cwd: currentDir }, (err, stdout, stderr) => {
+        if (err) {
+          console.log(stderr.trim());
+        } else {
+          console.log(stdout.trim());
+        }
+      });
+      break;
+
     case "bye":
     case "exit":
       console.log("See ya!");
@@ -134,7 +206,9 @@ async function runCommand(input: string) {
 }
 
 function ask() {
-  rl.question(`zappy ${path.basename(currentDir)}> `, async (input: string) => {
+  const branch = getGitBranch();
+  const dirDisplay = formatDir(currentDir);
+  rl.question(`\x1b[1m\x1b[35mzappy${branch ? ` (${branch})` : ""} ${dirDisplay}\x1b[0m> `, async (input: string) => {
     await runCommand(input);
     if (!["exit", "bye"].includes(input.trim().toLowerCase())) {
       ask();
