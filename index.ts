@@ -186,12 +186,13 @@ Available Commands:
       const gitArgs = args.slice(1).join(" ");
       exec(`git ${gitArgs}`, { cwd: currentDir }, (err, stdout, stderr) => {
         if (err) {
-          console.log(stderr.trim());
+          console.error(stderr.trim());
         } else {
           console.log(stdout.trim());
         }
+        ask(); // continue prompt after async
       });
-      break;
+      return;
 
     case "bye":
     case "exit":
@@ -200,9 +201,20 @@ Available Commands:
       return;
 
     default:
+      if (input.startsWith("git ")) {
+        exec(input, { cwd: currentDir }, (error, stdout, stderr) => {
+          if (error) console.error(`❌ Git Error: ${error.message}`);
+          if (stdout) console.log(stdout);
+          if (stderr) console.error(stderr);
+          ask();
+        });
+        return;
+      }
       console.log("Unknown command. Type 'help' for options.");
       break;
   }
+
+  ask(); // call this after every command except async git
 }
 
 function ask() {
@@ -210,11 +222,9 @@ function ask() {
   const dirDisplay = formatDir(currentDir);
   rl.question(`\x1b[1m\x1b[35mzappy${branch ? ` (${branch})` : ""} ${dirDisplay}\x1b[0m> `, async (input: string) => {
     await runCommand(input);
-    if (!["exit", "bye"].includes(input.trim().toLowerCase())) {
-      ask();
-    }
   });
 }
 
 console.log("Hey there! I'm Zappy, your friendly terminal!");
 ask();
+
