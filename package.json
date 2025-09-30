@@ -1,10 +1,30 @@
 {
   "name": "zappy-terminal",
+  "version": "2.0.0",
+  "description": "A modern, modular terminal implementation built with TypeScript and Bun",
   "module": "index.ts",
+  "main": "index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "start": "bun run index.ts",
+    "dev": "bun --watch index.ts",
+    "build": "bun build index.ts --outdir dist",
+    "type-check": "tsc --noEmit",
+    "test": "bun run test.ts",
+    "main": "bun run src/main.ts"
+  },
+  "keywords": [
+    "terminal",
+    "cli",
+    "typescript",
+    "bun",
+    "modular",
+    "interactive"
+  ],
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/node": "^24.6.0"
   },
   "peerDependencies": {
     "typescript": "^5"
