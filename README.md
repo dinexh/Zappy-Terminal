@@ -1,4 +1,4 @@
-bu# 🚀 Zappy Terminal
+# 🚀 Zappy Terminal
 
 A modern, modular terminal implementation built with TypeScript and Bun.
 
@@ -119,13 +119,6 @@ interface CommandContext {
   exit: () => void;
 }
 ```
-
-## Contributing
-
-1. Follow the modular architecture
-2. Add proper TypeScript types
-3. Test your changes
-4. Update documentation
 
 ## License
 
