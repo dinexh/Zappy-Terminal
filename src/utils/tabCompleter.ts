@@ -1,54 +1,44 @@
 import * as fs from "fs";
-import type { TabCompleterResult } from "../types";
-
-const GIT_SUBCOMMANDS = [
-  "add",
-  "status",
-  "commit",
-  "push",
-  "pull",
-  "branch",
-  "checkout",
-  "log",
-  "diff",
-];
-
-const FILE_COMMANDS = ["cd", "touch", "rm", "rmdir", "mv", "cat"];
+import * as path from "path";
+import type { CommandRegistry } from "../commands/index";
 
 export class TabCompleter {
-  private registry: any;
+  private registry: CommandRegistry;
 
-  constructor(registry: any) {
+  constructor(registry: CommandRegistry) {
     this.registry = registry;
   }
 
   complete(line: string, currentDir: string): [string[], string] {
-    const words = line.trim().split(" ");
-    const [cmd, ...rest] = words;
+    const parts = line.trim().split(/\s+/);
+    const lastPart = parts[parts.length - 1] || "";
 
-    if (words.length === 1) {
-      const commandNames = this.registry.getCommandNames();
-      const hits = commandNames.filter((c: string) => c.startsWith(cmd || ""));
-      return [hits.length ? hits : commandNames, cmd || ""];
+    if (parts.length <= 1) {
+      const commands = this.registry.getCommandNames();
+      const matches = commands.filter(cmd => cmd.startsWith(lastPart));
+      return [matches, line];
     }
 
-    if (FILE_COMMANDS.includes(cmd || "")) {
-      const input = rest[rest.length - 1] || "";
-      try {
-        const files = fs.readdirSync(currentDir);
-        const suggestions = files.filter((f) => f.startsWith(input || ""));
-        return [suggestions.length ? suggestions : files, input];
-      } catch {
-        return [[], input];
-      }
-    }
+    try {
+      const searchDir = lastPart.includes("/") 
+        ? path.join(currentDir, path.dirname(lastPart))
+        : currentDir;
+      const searchPrefix = lastPart.includes("/")
+        ? path.basename(lastPart)
+        : lastPart;
 
-    if ((cmd || "") === "git" && rest.length >= 1) {
-      const currentGitArg = rest[rest.length - 1] || "";
-      const hits = GIT_SUBCOMMANDS.filter((c) => c.startsWith(currentGitArg || ""));
-      return [hits.length ? hits : GIT_SUBCOMMANDS, currentGitArg];
-    }
+      const items = fs.readdirSync(searchDir);
+      const matches = items
+        .filter(item => item.startsWith(searchPrefix))
+        .map(item => {
+          const fullPath = path.join(searchDir, item);
+          const isDir = fs.statSync(fullPath).isDirectory();
+          return isDir ? item + "/" : item;
+        });
 
-    return [[], line];
+      return [matches, line];
+    } catch {
+      return [[], line];
+    }
   }
 }

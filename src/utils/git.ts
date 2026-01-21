@@ -21,9 +21,8 @@ export class GitUtils {
         encoding: "utf8",
         stdio: ["pipe", "pipe", "pipe"],
       }).trim();
-      const result = commandOutput ? " ✗" : "";
-      return result;
-    } catch (error: any) {
+      return commandOutput ? " *" : "";
+    } catch {
       return "";
     }
   }

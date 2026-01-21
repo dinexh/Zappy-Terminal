@@ -6,7 +6,6 @@ export class CommandRegistry {
 
   registerCommand(command: Command): void {
     this.commands.set(command.name, command);
-    
     if (command.aliases) {
       command.aliases.forEach(alias => {
         this.aliases.set(alias, command.name);
@@ -37,3 +36,4 @@ export class CommandRegistry {
 export * from "./basic";
 export * from "./filesystem";
 export * from "./system";
+export * from "./enhanced";

@@ -4,19 +4,8 @@ import type { Command, CommandContext } from "../types";
 export class SystemCommands {
   getCommands(): Command[] {
     return [
-      {
-        name: "git",
-        description: "Run git commands",
-        usage: "git <command> [options]",
-        handler: this.gitCommand
-      },
-      {
-        name: "exit",
-        aliases: ["bye"],
-        description: "Exit the terminal",
-        usage: "exit",
-        handler: this.exitCommand
-      }
+      { name: "git", description: "Run git commands", usage: "git <command> [options]", handler: this.gitCommand.bind(this) },
+      { name: "exit", aliases: ["bye"], description: "Exit the terminal", usage: "exit", handler: this.exitCommand.bind(this) }
     ];
   }
 
@@ -34,7 +23,7 @@ export class SystemCommands {
         if (stderr) {
           console.error(stderr.trim());
         } else {
-          console.error(`❌ Git Execution Error: ${err.message}`);
+          console.error(`Git Execution Error: ${err.message}`);
         }
       } else {
         if (stdout) {
@@ -49,7 +38,7 @@ export class SystemCommands {
   }
 
   private exitCommand(args: string[], context: CommandContext): void {
-    console.log("See ya! 👋");
+    console.log("Goodbye!");
     context.exit();
   }
 
@@ -59,11 +48,7 @@ export class SystemCommands {
       { cwd: context.currentDir },
       (error, stdout, stderr) => {
         if (error) {
-          if (
-            error.code === 127 ||
-            (process.platform === "win32" &&
-              error.message.includes("is not recognized"))
-          ) {
+          if (error.code === 127 || (process.platform === "win32" && error.message.includes("is not recognized"))) {
             console.log(`Command not found: ${command}`);
           } else {
             if (stderr) {

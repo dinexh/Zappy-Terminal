@@ -1,0 +1,139 @@
+.demo {
+  padding: 60px 0;
+}
+
+.demo h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.demo-intro {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+  max-width: 500px;
+}
+
+.demo-intro code {
+  font-size: 0.85rem;
+}
+
+.demo-content {
+  max-width: 700px;
+  margin-bottom: 40px;
+}
+
+.mode-selector {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.mode-btn {
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mode-btn:hover {
+  color: var(--text-secondary);
+  border-color: var(--text-muted);
+}
+
+.mode-btn.active {
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+  background: var(--bg-secondary);
+}
+
+.demo-terminal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.terminal-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.terminal-title {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.terminal-body {
+  padding: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.terminal-line {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.prompt {
+  color: var(--text-muted);
+}
+
+.command {
+  color: var(--text-primary);
+}
+
+.terminal-response {
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  font-size: 0.75rem;
+}
+
+.terminal-output {
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.demo-install {
+  max-width: 700px;
+}
+
+.demo-install p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.demo-install pre {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-size: 0.8rem;
+  overflow-x: auto;
+}
+
+.demo-install code {
+  background: none;
+  padding: 0;
+}
+
+@media (max-width: 640px) {
+  .mode-selector {
+    flex-wrap: wrap;
+  }
+}

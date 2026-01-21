@@ -3,36 +3,11 @@ import type { Command, CommandContext } from "../types";
 export class BasicCommands {
   getCommands(): Command[] {
     return [
-      {
-        name: "hi",
-        description: "Say hello",
-        usage: "hi",
-        handler: this.hiCommand
-      },
-      {
-        name: "what",
-        description: "What can I do?",
-        usage: "what",
-        handler: this.whatCommand
-      },
-      {
-        name: "help",
-        description: "Show available commands",
-        usage: "help",
-        handler: this.helpCommand
-      },
-      {
-        name: "clear",
-        description: "Clear the screen",
-        usage: "clear",
-        handler: this.clearCommand
-      },
-      {
-        name: "pwd",
-        description: "Show current directory",
-        usage: "pwd",
-        handler: this.pwdCommand
-      }
+      { name: "hi", description: "Say hello", usage: "hi", handler: this.hiCommand.bind(this) },
+      { name: "what", description: "What can I do?", usage: "what", handler: this.whatCommand.bind(this) },
+      { name: "help", description: "Show available commands", usage: "help", handler: this.helpCommand.bind(this) },
+      { name: "clear", description: "Clear the screen", usage: "clear", handler: this.clearCommand.bind(this) },
+      { name: "pwd", description: "Show current directory", usage: "pwd", handler: this.pwdCommand.bind(this) }
     ];
   }
 
@@ -46,29 +21,29 @@ export class BasicCommands {
 
   private helpCommand(args: string[], context: CommandContext): void {
     console.log(`
-🚀 Zappy Terminal - Available Commands:
+ShellX Terminal - Available Commands:
 
 Basic Commands:
-  hi           → Say hello
-  what         → What can I do?
-  help         → Show this help message
-  clear        → Clear the screen
-  pwd          → Show current directory
+  hi           - Say hello
+  what         - What can I do?
+  help         - Show this help message
+  clear        - Clear the screen
+  pwd          - Show current directory
 
 File & Directory Commands:
-  ls           → List files in current directory
-  cd <dir>     → Change directory
-  mkdir <dir>  → Create a directory
-  touch <file> → Create an empty file
-  rm <file>    → Delete a file
-  rm -rf <dir> → Delete a directory recursively
-  rmdir <dir>  → Delete an empty directory
-  mv <src> <dst> → Rename or move file/folder
-  cat <file>   → View file content
+  ls           - List files in current directory
+  cd <dir>     - Change directory
+  mkdir <dir>  - Create a directory
+  touch <file> - Create an empty file
+  rm <file>    - Delete a file
+  rm -rf <dir> - Delete a directory recursively
+  rmdir <dir>  - Delete an empty directory
+  mv <src> <dst> - Rename or move file/folder
+  cat <file>   - View file content
 
 System Commands:
-  git <...>    → Run git commands
-  exit / bye   → Exit the terminal
+  git <...>    - Run git commands
+  exit / bye   - Exit the terminal
     `);
   }
 
