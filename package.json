@@ -1,18 +1,17 @@
 {
-  "name": "zappy-terminal",
+  "name": "shellx-terminal",
   "version": "2.0.0",
-  "description": "A modern, modular terminal implementation built with TypeScript and Bun",
-  "module": "index.ts",
-  "main": "index.ts",
+  "description": "A modern, modular terminal with custom commands, layered architecture, and multi-modal output",
+  "module": "src/main.ts",
+  "main": "src/main.ts",
   "type": "module",
   "private": true,
   "scripts": {
-    "start": "bun run index.ts",
-    "dev": "bun --watch index.ts",
-    "build": "bun build index.ts --outdir dist",
+    "start": "bun run src/main.ts",
+    "dev": "bun --watch src/main.ts",
+    "build": "bun build src/main.ts --outdir dist",
     "type-check": "tsc --noEmit",
-    "test": "bun run test.ts",
-    "main": "bun run src/main.ts"
+    "test": "bun run test.ts"
   },
   "keywords": [
     "terminal",

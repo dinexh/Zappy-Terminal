@@ -1,129 +1,115 @@
-# 🚀 Zappy Terminal
+# ShellX Terminal
 
-A modern, modular terminal implementation built with TypeScript and Bun.
-
-## Features
-
-- **Modular Architecture**: Clean separation of concerns with dedicated modules for commands, utilities, and core functionality
-- **Command System**: Extensible command registry with support for aliases
-- **Tab Completion**: Smart tab completion for commands and files
-- **Git Integration**: Git branch and status display in prompt
-- **File Operations**: Comprehensive file and directory management
-- **System Commands**: Execute system commands with fallback support
+A modern, modular terminal with custom commands, layered architecture, multi-modal output, and intelligent presentation.
 
 ## Architecture
 
-The codebase is organized into the following modules:
-
 ```
-src/
-├── commands/           # Command implementations
-│   ├── basic.ts       # Basic commands (hi, help, clear, pwd)
-│   ├── filesystem.ts  # File operations (ls, cd, mkdir, rm, etc.)
-│   ├── system.ts      # System commands (git, exit)
-│   └── index.ts       # Command registry
-├── core/
-│   └── terminal.ts    # Core terminal functionality
-├── types/
-│   └── index.ts       # TypeScript type definitions
-├── utils/             # Utility functions
-│   ├── git.ts        # Git utilities
-│   ├── path.ts       # Path utilities
-│   └── tabCompleter.ts # Tab completion logic
-└── main.ts            # Alternative entry point
+                    ShellX Terminal Architecture
+    
+    +----------------------------------------------------------+
+    |                      User Input                           |
+    +----------------------------------------------------------+
+                              |
+                              v
+    +----------------------------------------------------------+
+    |                   Command Pipeline                        |
+    |  +----------+  +----------+  +--------+  +---------+     |
+    |  |  Intent  |->| Validate |->|  Plan  |->| Execute |     |
+    |  +----------+  +----------+  +--------+  +---------+     |
+    +----------------------------------------------------------+
+                              |
+                              v
+    +----------------------------------------------------------+
+    |                 Multi-Modal Output                        |
+    |   Text | Table | List | Tree | KeyValue | Progress       |
+    |   Success | Error | Warning | Info | Diff | Composite    |
+    +----------------------------------------------------------+
+                              |
+                              v
+    +----------------------------------------------------------+
+    |                 Presentation Layer                        |
+    |     default | compact | detailed | json | minimal        |
+    +----------------------------------------------------------+
 ```
 
-## Installation
+## Features
 
-1. Install dependencies:
-   ```bash
-   bun install
-   ```
+- **Custom Commands**: Fully customizable commands with parameters, flags, validation
+- **Layer Architecture**: 5-stage pipeline (Intent, Validate, Plan, Execute, Present)
+- **Multi-Modal Output**: 12+ output types (tables, trees, lists, progress, etc.)
+- **Smart Presentation**: 5 display modes with automatic formatting
+- **Composable**: Chain commands and build workflows
+- **Self-Documenting**: Auto-generated help from command definitions
 
-2. Install Node.js type definitions:
-   ```bash
-   npm install --save-dev @types/node
-   ```
+## Setup
 
-## Usage
-
-### Run the Terminal
+### Terminal CLI
 
 ```bash
-# Primary entry point (recommended)
-bun run index.ts
+# Clone the repository
+git clone https://github.com/user/shellx-terminal
+cd shellx-terminal
 
-# Alternative entry point
-bun run src/main.ts
+# Install dependencies
+bun install
+
+# Run the terminal
+bun run start
 ```
 
-### Available Commands
+### Web Documentation
 
-#### Basic Commands
+```bash
+# Navigate to web folder
+cd web
+
+# Install dependencies
+npm install
+
+# Start development server
+npm start
+```
+
+## Commands
+
+### Basic
 - `hi` - Say hello
-- `what` - What can I do?
-- `help` - Show available commands
-- `clear` - Clear the screen
-- `pwd` - Show current directory
+- `help` - Show help
+- `clear` - Clear screen
+- `pwd` - Current directory
 
-#### File & Directory Commands
-- `ls` - List files in current directory
+### Enhanced
+- `lsx [path] [--tree] [--long]` - Rich directory listing
+- `info <path>` - File information
+- `search <pattern> [-r]` - Search files
+- `du [path]` - Disk usage
+- `env [--all]` - Environment info
+
+### Files
+- `ls` - List files
 - `cd <dir>` - Change directory
-- `mkdir <dir>` - Create a directory
-- `touch <file>` - Create an empty file
-- `rm <file>` - Delete a file
-- `rm -rf <dir>` - Delete a directory recursively
-- `rmdir <dir>` - Delete an empty directory
-- `mv <src> <dst>` - Move or rename file/folder
-- `cat <file>` - View file content
+- `mkdir <name>` - Create directory
+- `touch <file>` - Create file
+- `rm <file>` / `rm -rf <dir>` - Remove
+- `mv <src> <dst>` - Move/rename
+- `cat <file>` - View file
 
-#### System Commands
-- `git <...>` - Run git commands
-- `exit` / `bye` - Exit the terminal
+### System
+- `git <command>` - Git commands
+- `exit` - Exit terminal
+- `:mode <mode>` - Switch presentation mode
 
-## Development
+## Presentation Modes
 
-### Building
+Switch modes at runtime with `:mode <name>`:
 
-```bash
-# Type check
-npx tsc --noEmit
-
-# Build (if needed)
-bun build index.ts
-```
-
-### Project Structure
-
-The modular design allows for easy extension:
-
-1. **Adding Commands**: Implement the `Command` interface and register with `CommandRegistry`
-2. **Adding Utilities**: Create utility classes and inject them into the terminal configuration
-3. **Custom Tab Completion**: Extend the `TabCompleter` class
-
-### Key Interfaces
-
-```typescript
-interface Command {
-  name: string;
-  aliases?: string[];
-  description: string;
-  usage: string;
-  handler: (args: string[], context: CommandContext) => Promise<void> | void;
-}
-
-interface CommandContext {
-  currentDir: string;
-  homeDir: string;
-  prompt: () => void;
-  exit: () => void;
-}
-```
+- `default` - Standard formatting with colors
+- `compact` - Reduced whitespace
+- `detailed` - Full details with timing
+- `json` - Raw JSON output
+- `minimal` - Essential only
 
 ## License
 
-MIT License - see LICENSE file for details.
-
----
-
-**Zappy Terminal** - Making command-line interactions more enjoyable! ✨
+MIT

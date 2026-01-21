@@ -1,0 +1,115 @@
+.commands {
+  padding: 60px 0;
+}
+
+.commands h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 32px;
+  color: var(--text-primary);
+}
+
+.commands-layout {
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 48px;
+  max-width: 900px;
+}
+
+.category-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.category-tab {
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.category-tab:hover {
+  color: var(--text-secondary);
+  border-color: var(--text-muted);
+}
+
+.category-tab.active {
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+  background: var(--bg-secondary);
+}
+
+.commands-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.command-item {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 16px;
+  align-items: baseline;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.command-item:last-child {
+  border-bottom: none;
+}
+
+.command-name {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.command-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.command-usage {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.output-types h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+}
+
+.output-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.output-type {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  .commands-layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  
+  .category-tabs {
+    flex-wrap: wrap;
+  }
+  
+  .command-item {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}

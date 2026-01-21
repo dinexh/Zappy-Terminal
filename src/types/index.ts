@@ -1,34 +1,56 @@
-export interface CommandArgs {
-  command: string;
-  args: string[];
-  target?: string;
-}
+export type {
+  ParameterType,
+  ParameterDefinition,
+  FlagDefinition,
+  CommandExample,
+  ComposableStep,
+  CommandLayers,
+  CommandDefinition,
+  Command,
+  CommandArgs,
+} from "./command";
 
-export interface CommandContext {
-  currentDir: string;
-  homeDir: string;
-  prompt: () => void;
-  exit: () => void;
-}
+export type {
+  OutputType,
+  OutputMetadata,
+  CommandOutput,
+  TextOutput,
+  TableOutput,
+  ListItem,
+  ListOutput,
+  TreeNode,
+  TreeOutput,
+  KeyValueOutput,
+  ProgressOutput,
+  DiffOutput,
+  ErrorOutput,
+  SuccessOutput,
+  CompositeOutput,
+  OutputBuilder,
+} from "./output";
 
-export interface Command {
-  name: string;
-  aliases?: string[];
-  description: string;
-  usage: string;
-  handler: (args: string[], context: CommandContext) => Promise<void> | void;
-}
+export type {
+  ParsedInput,
+  CommandIntent,
+  ValidationResult,
+  ExecutionStep,
+  ImpactAssessment,
+  ExecutionPlan,
+  ExecutionEvent,
+  StepTrace,
+  ExecutionTrace,
+  ExecutionContext,
+  CommandPipeline,
+} from "./pipeline";
 
-export interface TabCompleterResult {
-  suggestions: string[];
-  input: string;
-}
+export type {
+  PresentationMode,
+  PresentationConfig,
+  PresentationContext,
+} from "./presentation";
 
-export interface TerminalConfig {
-  registry: any;
-  utilities: {
-    git: any;
-    path: any;
-    tabCompleter: any;
-  };
-}
+export type {
+  CommandContext,
+  TerminalConfig,
+  TabCompleterResult,
+} from "./context";
