@@ -103,7 +103,7 @@ const Demo: React.FC = () => {
 
         <div className="demo-install">
           <p>Get started:</p>
-          <pre><code>git clone https://github.com/user/shellx-terminal && cd shellx-terminal && bun install && bun start</code></pre>
+          <pre><code>git clone https://github.com/dinexh/ShellX.git && cd ShellX && bun install && bun start</code></pre>
         </div>
       </div>
     </section>

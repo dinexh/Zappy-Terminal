@@ -18,10 +18,10 @@ const Hero: React.FC = () => {
           </p>
           <div className="hero-actions">
             <p className="hero-links">
-              View the [<a href="https://github.com/dinexh/shellx" target="_blank" rel="noopener noreferrer">source code</a>] or try the [<a href="#demo">live demo</a>] below.
+              View the [<a href="https://github.com/dinexh/ShellX" target="_blank" rel="noopener noreferrer">source code</a>] or try the [<a href="#demo">live demo</a>] below.
             </p>
             <a
-              href="https://github.com/dinexh/shellx"
+              href="https://github.com/dinexh/ShellX"
               target="_blank"
               rel="noopener noreferrer"
               className="github-star-button"
