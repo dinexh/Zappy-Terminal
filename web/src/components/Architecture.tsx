@@ -6,46 +6,51 @@ const layers = [
     name: 'Intent',
     description: 'Interpret what the user wants to do',
     details: 'Parse raw input, extract command name, arguments, and flags. Convert to structured intent object.',
-    code: `onIntent((input) => ({
-  action: "list",
-  targets: [input.args[0]],
-  options: { tree: input.flags.tree }
-}))`
+    code: `on_intent fn input ->
+  %{
+    action: "list",
+    targets: [List.first(input.args)],
+    options: %{tree: input.flags.tree}
+  }
+end`
   },
   {
     name: 'Validate',
     description: 'Check if operation can be performed',
     details: 'Verify required parameters, validate types, check permissions, return warnings.',
-    code: `onValidate(async (intent, ctx) => {
-  if (!intent.targets[0]) {
-    return { valid: false, error: "Path required" };
-  }
-  return { valid: true };
-})`
+    code: `on_validate fn intent, _ctx ->
+  case intent.targets do
+    [nil | _] -> {:error, "Path required"}
+    [] -> {:error, "Path required"}
+    _ -> :ok
+  end
+end`
   },
   {
     name: 'Plan',
     description: 'Create an execution plan',
     details: 'Build step-by-step plan, enable dry-run mode, estimate impact, define rollback.',
-    code: `onPlan((intent, ctx) => ({
-  steps: [
-    { id: "read", action: "readdir" },
-    { id: "format", action: "format" }
-  ],
-  reversible: true
-}))`
+    code: `on_plan fn _intent, _ctx ->
+  %{
+    steps: [
+      %{id: "read", action: "readdir"},
+      %{id: "format", action: "format"}
+    ],
+    reversible: true
+  }
+end`
   },
   {
     name: 'Execute',
     description: 'Perform the actual operation',
     details: 'Run each step in the plan, emit events, handle errors, return structured output.',
-    code: `onExecute(async (plan, ctx) => {
-  const items = await fs.readdir(path);
-  return Output.table(
+    code: `on_execute fn plan, ctx ->
+  items = File.ls!(ctx.path)
+  Output.table(
     ["Name", "Type"],
-    items.map(i => [i.name, i.type])
-  );
-})`
+    Enum.map(items, fn name -> [name, "file"] end)
+  )
+end`
   },
   {
     name: 'Present',
@@ -68,7 +73,7 @@ const Architecture: React.FC = () => {
       <div className="container">
         <h2>Architecture</h2>
         <p className="architecture-intro">
-          Commands flow through five logical layers for predictability and extensibility. 
+          Commands flow through five logical layers for predictability and extensibility. The backend pipeline is implemented in Elixir for concurrency and fault tolerance. 
           Click each layer to see details.
         </p>
         

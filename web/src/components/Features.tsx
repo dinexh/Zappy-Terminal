@@ -5,7 +5,7 @@ const features = [
   {
     title: 'Custom Commands',
     description: 'Create fully customizable commands with parameters, flags, validation, and documentation.',
-    tags: ['TypeScript', 'Builder Pattern']
+    tags: ['Elixir', 'Pattern Matching']
   },
   {
     title: 'Layer Architecture',

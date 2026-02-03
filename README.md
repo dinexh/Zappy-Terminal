@@ -44,30 +44,27 @@ A modern, modular terminal with custom commands, layered architecture, multi-mod
 
 ## Setup
 
-### Terminal CLI
+### Phoenix Backend
 
 ```bash
-# Clone the repository
-git clone https://github.com/user/shellx-terminal
-cd shellx-terminal
+cd backend
+mix deps.get
+mix ecto.create
+mix phx.server
+```
 
-# Install dependencies
-bun install
+Run tests:
 
-# Run the terminal
-bun run start
+```bash
+cd backend
+mix test
 ```
 
 ### Web Documentation
 
 ```bash
-# Navigate to web folder
 cd web
-
-# Install dependencies
 npm install
-
-# Start development server
 npm start
 ```
 

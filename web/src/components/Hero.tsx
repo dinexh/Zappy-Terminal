@@ -9,7 +9,7 @@ const Hero: React.FC = () => {
         <div className="hero-header">
           <h1>ShellX Terminal</h1>
           <p className="hero-tagline">
-            A modern terminal framework built with [<a href="https://www.typescriptlang.org/" target="_blank" rel="noopener noreferrer">TypeScript</a>] and [<a href="https://bun.sh/" target="_blank" rel="noopener noreferrer">Bun</a>]. 
+            A modern terminal framework with an [<a href="https://elixir-lang.org/" target="_blank" rel="noopener noreferrer">Elixir</a>] backend and a [<a href="https://bun.sh/" target="_blank" rel="noopener noreferrer">Bun</a>]-powered CLI. 
             Features custom commands as first-class citizens, layer-wise architecture, and multi-modal output.
           </p>
           <p className="hero-description">

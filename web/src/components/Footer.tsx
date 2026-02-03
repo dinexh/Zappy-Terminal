@@ -6,7 +6,7 @@ const Footer: React.FC = () => {
     <footer className="footer">
       <div className="container">
         <p>
-          Built with [<a href="https://www.typescriptlang.org/" target="_blank" rel="noopener noreferrer">TypeScript</a>] and [<a href="https://bun.sh/" target="_blank" rel="noopener noreferrer">Bun</a>]. 
+          Built with [<a href="https://elixir-lang.org/" target="_blank" rel="noopener noreferrer">Elixir</a>] and [<a href="https://bun.sh/" target="_blank" rel="noopener noreferrer">Bun</a>]. 
           View [<a href="https://github.com/dinexh/ShellX" target="_blank" rel="noopener noreferrer">source</a>].
         </p>
         <p>

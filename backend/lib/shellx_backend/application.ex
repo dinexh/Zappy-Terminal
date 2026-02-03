@@ -1,0 +1,48 @@
+defmodule ShellxBackend.Application do
+  # See https://hexdocs.pm/elixir/Application.html
+  # for more information on OTP Applications
+  @moduledoc false
+
+  use Application
+
+  @impl true
+  def start(_type, _args) do
+    children =
+      [
+        ShellxBackendWeb.Telemetry,
+        {DNSCluster, query: Application.get_env(:shellx_backend, :dns_cluster_query) || :ignore},
+        {Phoenix.PubSub, name: ShellxBackend.PubSub},
+        ShellxBackend.Services.IntentService,
+        ShellxBackend.Services.ValidateService,
+        ShellxBackend.Services.PlanService,
+        ShellxBackend.Services.ExecuteService,
+        ShellxBackend.Services.PresentService,
+        # Start a worker by calling: ShellxBackend.Worker.start_link(arg)
+        # {ShellxBackend.Worker, arg},
+        # Start to serve requests, typically the last entry
+        ShellxBackendWeb.Endpoint
+      ]
+      |> maybe_add_repo()
+
+    # See https://hexdocs.pm/elixir/Supervisor.html
+    # for other strategies and supported options
+    opts = [strategy: :one_for_one, name: ShellxBackend.Supervisor]
+    Supervisor.start_link(children, opts)
+  end
+
+  defp maybe_add_repo(children) do
+    if Application.get_env(:shellx_backend, :start_repo, true) do
+      [ShellxBackend.Repo | children]
+    else
+      children
+    end
+  end
+
+  # Tell Phoenix to update the endpoint configuration
+  # whenever the application is updated.
+  @impl true
+  def config_change(changed, _new, removed) do
+    ShellxBackendWeb.Endpoint.config_change(changed, removed)
+    :ok
+  end
+end
